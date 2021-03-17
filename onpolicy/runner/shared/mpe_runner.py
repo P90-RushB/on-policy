@@ -24,7 +24,11 @@ class MPERunner(Runner):
             for step in range(self.episode_length):
                 # Sample actions
                 values, actions, action_log_probs, rnn_states, rnn_states_critic, actions_env = self.collect(step)
-                    
+                
+                # render
+                # for p in self.envs.envs:
+                #     p.render(close=False)
+
                 # Obser reward and next obs
                 obs, rewards, dones, infos = self.envs.step(actions_env)
 
