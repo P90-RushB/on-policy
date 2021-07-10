@@ -2,6 +2,8 @@ import time
 import numpy as np
 import torch
 from onpolicy.runner.shared.base_runner import Runner
+import wandb
+import imageio
 
 def _t2n(x):
     return x.detach().cpu().numpy()
@@ -180,6 +182,7 @@ class MPERunner(Runner):
         eval_episode_rewards = np.array(eval_episode_rewards)
         eval_env_infos = {}
         eval_env_infos['eval_average_episode_rewards'] = np.sum(np.array(eval_episode_rewards), axis=0)
+        eval_average_episode_rewards = np.mean(eval_env_infos['eval_average_episode_rewards'])
         print("eval average episode rewards of agent: " + str(eval_average_episode_rewards))
         self.log_env(eval_env_infos, total_num_steps)
 
@@ -192,8 +195,10 @@ class MPERunner(Runner):
         for episode in range(self.all_args.render_episodes):
             obs = envs.reset()
             if self.all_args.save_gifs:
-                image = envs.render('rgb_array', close=False)[0]
+                image = envs.render('rgb_array')[0][0]
                 all_frames.append(image)
+            else:
+                envs.render('human')
 
             rnn_states = np.zeros((self.n_rollout_threads, self.num_agents, self.recurrent_N, self.hidden_size), dtype=np.float32)
             masks = np.ones((self.n_rollout_threads, self.num_agents, 1), dtype=np.float32)
@@ -232,14 +237,16 @@ class MPERunner(Runner):
                 masks[dones == True] = np.zeros(((dones == True).sum(), 1), dtype=np.float32)
 
                 if self.all_args.save_gifs:
-                    image = envs.render('rgb_array', close=False)[0]
+                    image = envs.render('rgb_array')[0][0]
                     all_frames.append(image)
                     calc_end = time.time()
                     elapsed = calc_end - calc_start
                     if elapsed < self.all_args.ifi:
-                        time.sleep(ifi - elapsed)
+                        time.sleep(self.all_args.ifi - elapsed)
+                else:
+                    envs.render('human')
 
             print("average episode rewards is: " + str(np.mean(np.sum(np.array(episode_rewards), axis=0))))
 
         if self.all_args.save_gifs:
-            imageio.mimsave(str(self.gif_dir) + 'render.gif', all_frames, duration=self.all_args.ifi)
+            imageio.mimsave(str(self.gif_dir) + '/render.gif', all_frames, duration=self.all_args.ifi)

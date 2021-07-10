@@ -4,7 +4,7 @@ Chao Yu*, Akash Velu*, Eugene Vinitsky, Yu Wang, Alexandre Bayen, and Yi Wu.
 
 Website: https://sites.google.com/view/mappo
 
-This repository implements MAPPO, an multi-agent variant of PPO. The implementation in this repositorory is used in the paper "The Surprising Effectiveness of MAPPO in Cooperative Multi-Agent Games" (https://arxiv.org/abs/2103.01955). 
+This repository implements MAPPO, a multi-agent variant of PPO. The implementation in this repositorory is used in the paper "The Surprising Effectiveness of MAPPO in Cooperative Multi-Agent Games" (https://arxiv.org/abs/2103.01955). 
 This repository is heavily based on https://github.com/ikostrikov/pytorch-a2c-ppo-acktr-gail. 
 
 ## Environments supported:
@@ -14,6 +14,8 @@ This repository is heavily based on https://github.com/ikostrikov/pytorch-a2c-pp
 - [Multiagent Particle-World Environments (MPEs)](https://github.com/openai/multiagent-particle-envs)
 
 ## 1. Usage
+**WARNING: by default all experiments assume a shared policy by all agents i.e. there is one neural network shared by all agents**
+
 All core code is located within the onpolicy folder. The algorithms/ subfolder contains algorithm-specific code
 for MAPPO. 
 
