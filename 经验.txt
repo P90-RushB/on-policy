@@ -1,1 +1,8 @@
-0
+调试运行时，可以在vscode的launch.json中加入参数列表：
+"args": ["--use_valuenorm", "--use_popart", "--env_name", "MPE", "--algorithm_name", "rmappo", "--use_recurrent_policy", "False",
+    "--use_naive_recurrent_policy", "True",
+    "--experiment_name",  "check", "--scenario_name", "simple_spread", "--num_agents", "3",
+    "--num_landmarks", "3", "--seed", "1", "--n_training_threads", "1", "--n_rollout_threads", "1",
+    "--num_mini_batch", "1", "--episode_length", "25", "--num_env_steps", "20000000", "--ppo_epoch", "10",
+    "--use_ReLU", "--gain", "0.01", "--lr", "7e-4", "--critic_lr 7e-4", "--wandb_name", "zoeyuchao", "--user_name", "zoeyuchao"]
+其中，mappo或者rmappo表示用不用rnn。 --use_recurrent_policy 表示用chunk（tbptt）还是naive的lstm
